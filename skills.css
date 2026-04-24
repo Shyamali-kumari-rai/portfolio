@@ -1,0 +1,220 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* BODY */
+/* 🌌 BODY BACKGROUND */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle at bottom, #020617 40%, #0b1c3d 100%);
+    color: white;
+    overflow-x: hidden;
+}
+
+/* ⭐ MAIN STARS */
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background-image:
+        radial-gradient(2px 2px at 20px 30px, white, transparent),
+        radial-gradient(1px 1px at 100px 80px, #00d4ff, transparent),
+        radial-gradient(2px 2px at 200px 150px, white, transparent),
+        radial-gradient(1px 1px at 300px 250px, #00d4ff, transparent),
+        radial-gradient(2px 2px at 400px 100px, white, transparent),
+        radial-gradient(1px 1px at 500px 200px, #00d4ff, transparent);
+    
+    background-size: 600px 600px;
+    animation: moveStars 80s linear infinite;
+    z-index: -2;
+}
+
+/* ✨ TWINKLE EFFECT */
+.stars::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image:
+        radial-gradient(2px 2px at 150px 200px, white, transparent),
+        radial-gradient(1px 1px at 250px 100px, #00d4ff, transparent),
+        radial-gradient(2px 2px at 350px 300px, white, transparent);
+    
+    animation: twinkle 2s infinite alternate;
+    opacity: 0.7;
+}
+
+/* 🌌 MOVING EFFECT */
+@keyframes moveStars {
+    from { transform: translate(0, 0); }
+    to { transform: translate(-500px, -500px); }
+}
+
+/* ✨ TWINKLE ANIMATION */
+@keyframes twinkle {
+    from { opacity: 0.3; }
+    to { opacity: 1; }
+}
+
+/* 💫 GALAXY GLOW */
+body::before {
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 70% 20%, rgba(0,212,255,0.15), transparent 60%),
+                radial-gradient(circle at 20% 80%, rgba(0,119,255,0.1), transparent 60%);
+    z-index: -1;
+}
+
+/* SIDEBAR */
+.sidebar {
+    position: fixed;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.05);
+    padding: 15px;
+    border-radius: 30px;
+    box-shadow: 0 0 20px #00d4ff;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sidebar i {
+    color: #ccc;
+    font-size: 18px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.sidebar i:hover {
+    color: #00d4ff;
+}
+.skills-section {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #020617;
+    color: white;
+    padding: 50px 20px;
+}
+
+.skills-container {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    max-width: 1100px;
+    width: 100%;
+}
+
+/* IMAGE */
+.skills-image img {
+    width: 350px;
+    filter: drop-shadow(0 0 20px #00d4ff);
+}
+
+/* TEXT */
+.skills-content {
+    flex: 1;
+}
+
+.skills-content h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.skills-content span {
+    color: #00d4ff;
+}
+
+.skills-content p {
+    color: #aaa;
+    margin-bottom: 25px;
+}
+
+/* SKILLS */
+.skill {
+    margin-bottom: 20px;
+}
+
+.skill-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+/* PROGRESS BAR */
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #1a2a3a;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* PROGRESS FILL */
+.progress {
+    height: 100%;
+    background: linear-gradient(90deg, #00d4ff, #0077ff);
+    border-radius: 10px;
+    animation: load 2s ease forwards;
+}
+
+/* INDIVIDUAL WIDTHS */
+.Java { width: 50%; }
+.html { width: 75%; }
+.python { width: 70%; }
+.graphic-designer { width: 75%; }
+
+/* ANIMATION */
+@keyframes load {
+    from { width: 0; }
+}
+/* NAVBAR */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 8%;
+    background: rgba(0, 0, 20, 0.8);
+}
+
+/* NAV LINKS AS BUTTONS */
+nav a {
+    text-decoration: none;
+    color: #fff;
+    padding: 8px 18px;
+    margin: 0 5px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.08);
+    transition: 0.3s;
+    font-size: 14px;
+    border: 1px solid transparent;
+}
+
+
+/* HOVER EFFECT */
+nav a:hover {
+    color: #00d4ff;
+    border: 1px solid #00d4ff;
+    box-shadow: 0 0 10px #00d4ff;
+}
+
+/* ACTIVE BUTTON (optional) */
+nav a.active {
+    background: linear-gradient(45deg, #00d4ff, #0077ff);
+    color: white;
+    box-shadow: 0 0 15px #00d4ff;
+}
+nav a:hover {
+    transform: scale(1.1);
+}
