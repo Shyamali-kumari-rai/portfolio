@@ -13,7 +13,7 @@ body {
   overflow-x: hidden;
 }
 
-/* 🌌 STARS BACKGROUND */
+/*  STARS BACKGROUND */
 .stars, .stars2, .stars3 {
   position: fixed;
   width: 100%;
@@ -142,9 +142,7 @@ nav a:hover {
   color: #00eaff;
 }
 
-/* ========================= */
-/* 📱 TABLET (<=1000px) */
-/* ========================= */
+
 @media (max-width: 1000px) {
   .cards {
     grid-template-columns: repeat(2, 1fr);
@@ -162,9 +160,7 @@ nav a:hover {
   }
 }
 
-/* ========================= */
-/* 📱 MOBILE (<=768px) */
-/* ========================= */
+
 @media (max-width: 768px) {
 
   header {
@@ -217,9 +213,7 @@ nav a:hover {
   }
 }
 
-/* ========================= */
-/* 📱 SMALL MOBILE (<=600px) */
-/* ========================= */
+
 @media (max-width: 600px) {
   .cards {
     grid-template-columns: 1fr;
