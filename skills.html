@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skills - Shyamali Portfolio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="skills.css">
+
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+<div class="stars"></div>
+
+<header>
+  <div class="logo">My<span>Portfolio</span></div>
+  <nav>
+    <a href="index.html">Portfolio</a>
+    <a href="about.html">About</a>
+    <a href="skills.html" class="active">Skills</a>
+    <a href="certificate.html">Certificate</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<section class="skills-section">
+  <div class="skills-container">
+
+    <!-- LEFT IMAGE -->
+    <div class="skills-image">
+      <img src="assets/robot.png" alt="skills robot" onerror="this.style.display='none'">
+    </div>
+
+    <!-- RIGHT CONTENT -->
+    <div class="skills-content">
+      <h1>My <span>Skills</span></h1>
+
+      <p>
+        I'm a passionate web developer creating modern, functional, and responsive digital experiences.
+      </p>
+
+      <!-- DYNAMIC SKILLS LIST -->
+      <div id="skills-display-container">
+        <div class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Loading skills...</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- Scripts -->
+<script src="js/supabase-config.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const container = document.getElementById("skills-display-container");
+    try {
+      const skills = await window.appSupabase.getSkills();
+      if (!skills || skills.length === 0) {
+        container.innerHTML = `<p style="color: #94a3b8;">No skills found.</p>`;
+        return;
+      }
+
+      container.innerHTML = skills.map(skill => `
+        <div class="skill">
+          <div class="skill-info">
+            <span>${skill.title}</span>
+            <span>${skill.level}%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress ${skill.icon_class || ''}" style="width: ${skill.level}%;"></div>
+          </div>
+        </div>
+      `).join('');
+    } catch (e) {
+      console.error("Error loading skills:", e);
+      container.innerHTML = `<p style="color: #ef4444;">Failed to load skills.</p>`;
+    }
+  });
+</script>
+</body>
+</html>

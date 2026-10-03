@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - Shyamali Portfolio</title>
+  
+  <!-- FontAwesome & Base CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/admin.css">
+
+  <!-- Supabase JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="admin-body">
+
+  <div class="stars"></div>
+
+  <!-- Minimal Header -->
+  <header>
+    <div class="logo">Portfolio <span>Admin</span></div>
+    <nav>
+      <a href="../index.html"><i class="fas fa-arrow-left"></i> Back to Site</a>
+    </nav>
+  </header>
+
+  <main class="auth-container">
+    <div class="glass-card">
+      <h2>Admin Portal</h2>
+      <p class="subtitle">Authenticate with Supabase to manage content</p>
+
+      <div id="auth-alert" style="display: none;" class="alert-box alert-error"></div>
+
+      <!-- Quick Supabase Credentials Setup if not configured -->
+      <div id="config-notice" class="alert-box alert-info" style="display: none;">
+        <div>
+          <strong>Supabase Not Connected:</strong> You can enter your project URL and Anon Key in Settings to connect live database, or use local preview mode.
+        </div>
+      </div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+          <input type="email" id="email" class="form-input" placeholder="admin@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password"><i class="fas fa-lock"></i> Password</label>
+          <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" id="login-btn" class="admin-btn btn-primary">
+          <i class="fas fa-sign-in-alt"></i> Sign In to Dashboard
+        </button>
+      </form>
+
+      <div style="margin-top: 25px; text-align: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 15px;">
+        <button id="direct-settings-btn" class="admin-btn btn-secondary btn-sm">
+          <i class="fas fa-cog"></i> Configure Supabase API Keys
+        </button>
+        <button id="demo-mode-btn" class="admin-btn btn-secondary btn-sm" style="margin-top: 8px;">
+          <i class="fas fa-flask"></i> Enter Demo / Offline Mode
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Key Config Modal -->
+  <div id="settings-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3><i class="fas fa-key"></i> Supabase Project Keys</h3>
+        <button class="close-modal-btn" onclick="toggleSettingsModal(false)">&times;</button>
+      </div>
+      <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 15px;">
+        Paste your Project URL & Public Anon Key found in <strong>Supabase -> Project Settings -> API</strong>.
+      </p>
+      <form id="supabase-config-form">
+        <div class="form-group">
+          <label for="sb-url">Supabase Project URL</label>
+          <input type="url" id="sb-url" class="form-input" placeholder="https://xyzcompany.supabase.co" required>
+        </div>
+        <div class="form-group">
+          <label for="sb-key">Supabase Anon Key</label>
+          <textarea id="sb-key" class="form-textarea" placeholder="eyJhbGciOiJIUzI1NiIsIn..." required></textarea>
+        </div>
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button type="button" class="admin-btn btn-secondary" onclick="toggleSettingsModal(false)">Cancel</button>
+          <button type="submit" class="admin-btn btn-primary">Save & Reload</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/admin-auth.js"></script>
+</body>
+</html>

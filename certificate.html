@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificates - Shyamali Portfolio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="certificate.css">
+
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<div class="stars"></div>
+
+<header>
+  <div class="logo">My<span>Portfolio</span></div>
+  <nav>
+    <a href="index.html">Portfolio</a>
+    <a href="about.html">About</a>
+    <a href="skills.html">Skills</a>
+    <a href="certificate.html" class="active">Certificate</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>MY <span>CERTIFICATES</span></h1>
+  <p>Proof of my skills and continuous learning journey</p>
+</section>
+
+<section class="certificates" id="certificates-container">
+  <div class="loading-spinner" style="grid-column: 1/-1;">
+    <div class="spinner"></div>
+    <p>Loading certificates...</p>
+  </div>
+</section>
+
+<!-- Image Preview Modal -->
+<div id="modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 999; justify-content: center; align-items: center;">
+  <span class="close" style="position: absolute; top: 25px; right: 35px; color: #fff; font-size: 40px; cursor: pointer;">&times;</span>
+  <img id="modal-img" src="" alt="Certificate" style="max-width: 90%; max-height: 85vh; border-radius: 12px; border: 2px solid #00eaff; box-shadow: 0 0 30px rgba(0,234,255,0.4);">
+</div>
+
+<script src="js/supabase-config.js"></script>
+<script src="js/script.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const container = document.getElementById("certificates-container");
+    try {
+      const certs = await window.appSupabase.getCertificates();
+      if (!certs || certs.length === 0) {
+        container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #94a3b8;">No certificates added yet.</p>`;
+        return;
+      }
+
+      container.innerHTML = certs.map(c => `
+        <div class="card">
+          <img src="${c.image_url}" alt="${c.title}" onclick="openModal('${c.image_url}')" onerror="this.src='assets/certificate1.jpeg'">
+          <div class="content">
+            <h3>${c.title}</h3>
+            <p>${c.description || ''}</p>
+            <a href="${c.credential_url || c.image_url}" target="_blank" class="btn">View</a>
+          </div>
+        </div>
+      `).join('');
+
+      // Re-attach card hover glow effects
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          card.style.boxShadow = `${x/10}px ${y/10}px 25px rgba(0,234,255,0.6)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.boxShadow = "0 0 10px rgba(0,234,255,0.2)";
+        });
+      });
+
+    } catch (e) {
+      console.error("Error loading certificates:", e);
+      container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ef4444;">Failed to load certificates.</p>`;
+    }
+  });
+</script>
+
+</body>
+</html>

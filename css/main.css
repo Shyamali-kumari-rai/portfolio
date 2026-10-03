@@ -1,0 +1,163 @@
+/* =========================================================
+   GLOBAL BASE & CSS VARIABLES (THEME)
+   ========================================================= */
+:root {
+  --primary-glow: #00eaff;
+  --secondary-glow: #a855f7;
+  --accent-pink: #ec4899;
+  --bg-dark: #070913;
+  --bg-card: rgba(18, 24, 43, 0.75);
+  --bg-card-hover: rgba(28, 38, 68, 0.85);
+  --border-glass: rgba(0, 234, 255, 0.2);
+  --border-glass-hover: rgba(0, 234, 255, 0.6);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Background animated stars / gradients */
+.stars, .stars2, .stars3 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.stars {
+  background: radial-gradient(circle at 20% 30%, rgba(0, 234, 255, 0.08) 0%, transparent 40%),
+              radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.08) 0%, transparent 40%),
+              radial-gradient(ellipse at bottom, #111726 0%, #070913 100%);
+}
+
+/* NAVBAR */
+header, .navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 8%;
+  background: rgba(7, 9, 19, 0.8);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.logo span {
+  color: var(--primary-glow);
+}
+
+nav {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 500;
+  transition: var(--transition);
+  position: relative;
+  padding: 6px 0;
+}
+
+nav a:hover,
+nav a.active {
+  color: var(--primary-glow);
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary-glow);
+  box-shadow: 0 0 10px var(--primary-glow);
+  transition: var(--transition);
+}
+
+nav a:hover::after,
+nav a.active::after {
+  width: 100%;
+}
+
+.admin-nav-btn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: rgba(0, 234, 255, 0.1);
+  border: 1px solid var(--border-glass);
+  color: var(--primary-glow) !important;
+  font-size: 0.9rem;
+}
+
+.admin-nav-btn:hover {
+  background: var(--primary-glow);
+  color: #000 !important;
+  box-shadow: 0 0 15px var(--primary-glow);
+}
+
+/* Utility UI components */
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: var(--text-muted);
+  gap: 15px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 234, 255, 0.2);
+  border-top-color: var(--primary-glow);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  header, .navbar {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 5%;
+  }
+  nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+}

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Shyamali Portfolio</title>
+  
+  <!-- FontAwesome & Styles -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/admin.css">
+
+  <!-- Supabase JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="admin-body">
+
+  <div class="stars"></div>
+
+  <!-- Dashboard Navigation -->
+  <header>
+    <div class="logo">Portfolio <span>Control Panel</span></div>
+    <nav>
+      <a href="../index.html" target="_blank"><i class="fas fa-external-link-alt"></i> View Live Site</a>
+      <button id="logout-btn" class="admin-btn btn-secondary btn-sm"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </nav>
+  </header>
+
+  <main class="dashboard-container">
+    
+    <!-- Status Banner -->
+    <div id="demo-banner" class="alert-box alert-info" style="display: none;">
+      <i class="fas fa-info-circle"></i>
+      <span><strong>Demo / Local Mode Active:</strong> Changes are saved to your browser storage. Connect Supabase to sync directly with your cloud database!</span>
+    </div>
+
+    <div class="dashboard-header">
+      <div class="dashboard-title">
+        <h1>Content Management</h1>
+        <p>Manage and edit skills, proficiency levels, and certificates</p>
+      </div>
+      <div>
+        <button id="config-keys-btn" class="admin-btn btn-secondary btn-sm">
+          <i class="fas fa-cog"></i> Supabase Settings
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" data-tab="skills-tab">
+        <i class="fas fa-code"></i> Skills (<span id="skills-count">0</span>)
+      </button>
+      <button class="tab-btn" data-tab="certificates-tab">
+        <i class="fas fa-certificate"></i> Certificates (<span id="certs-count">0</span>)
+      </button>
+      <button class="tab-btn" data-tab="messages-tab">
+        <i class="fas fa-envelope"></i> Inquiries (<span id="messages-count">0</span>)
+      </button>
+    </div>
+
+    <!-- SKILLS SECTION -->
+    <div id="skills-tab" class="tab-content">
+      <div class="section-header-bar">
+        <h3>Your Skillset & Progress</h3>
+        <button class="admin-btn btn-primary btn-sm" onclick="openSkillModal()">
+          <i class="fas fa-plus"></i> Add New Skill
+        </button>
+      </div>
+
+      <div id="skills-loader" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading skills...</p>
+      </div>
+
+      <div id="skills-list" class="admin-grid" style="display: none;"></div>
+    </div>
+
+    <!-- CERTIFICATES SECTION -->
+    <div id="certificates-tab" class="tab-content" style="display: none;">
+      <div class="section-header-bar">
+        <h3>Certificates & Achievements</h3>
+        <button class="admin-btn btn-primary btn-sm" onclick="openCertificateModal()">
+          <i class="fas fa-plus"></i> Add New Certificate
+        </button>
+      </div>
+
+      <div id="certs-loader" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading certificates...</p>
+      </div>
+
+      <div id="certificates-list" class="admin-grid" style="display: none;"></div>
+    </div>
+
+    <!-- MESSAGES SECTION -->
+    <div id="messages-tab" class="tab-content" style="display: none;">
+      <div class="section-header-bar">
+        <h3>Contact Form Inquiries</h3>
+        <button class="admin-btn btn-secondary btn-sm" onclick="loadMessages()">
+          <i class="fas fa-sync-alt"></i> Refresh Messages
+        </button>
+      </div>
+
+      <div id="messages-loader" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading messages...</p>
+      </div>
+
+      <div id="messages-list" class="admin-grid" style="display: none;"></div>
+    </div>
+
+  </main>
+
+  <!-- SKILL MODAL -->
+  <div id="skill-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="skill-modal-title"><i class="fas fa-code"></i> Add Skill</h3>
+        <button class="close-modal-btn" onclick="closeSkillModal()">&times;</button>
+      </div>
+      <form id="skill-form">
+        <input type="hidden" id="skill-id">
+        
+        <div class="form-group">
+          <label for="skill-title">Skill Title</label>
+          <input type="text" id="skill-title" class="form-input" placeholder="e.g. React.js, Java, Python" required>
+        </div>
+
+        <div class="form-group">
+          <label for="skill-level">Proficiency Level (%) <span id="level-display" style="color: #00eaff;">75%</span></label>
+          <input type="range" id="skill-level" min="10" max="100" value="75" class="form-input" style="padding: 4px;" oninput="document.getElementById('level-display').innerText = this.value + '%'">
+        </div>
+
+        <div class="form-group">
+          <label for="skill-icon">CSS / Progress Class Name</label>
+          <input type="text" id="skill-icon" class="form-input" placeholder="e.g. java, python, html, react" required>
+        </div>
+
+        <div class="form-group">
+          <label for="skill-order">Display Order</label>
+          <input type="number" id="skill-order" class="form-input" value="1" min="1">
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+          <button type="button" class="admin-btn btn-secondary" onclick="closeSkillModal()">Cancel</button>
+          <button type="submit" id="save-skill-btn" class="admin-btn btn-primary">Save Skill</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CERTIFICATE MODAL -->
+  <div id="certificate-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="cert-modal-title"><i class="fas fa-certificate"></i> Add Certificate</h3>
+        <button class="close-modal-btn" onclick="closeCertificateModal()">&times;</button>
+      </div>
+      <form id="certificate-form">
+        <input type="hidden" id="cert-id">
+        
+        <div class="form-group">
+          <label for="cert-title">Certificate Title</label>
+          <input type="text" id="cert-title" class="form-input" placeholder="e.g. Fullstack Web Bootcamp" required>
+        </div>
+
+        <div class="form-group">
+          <label for="cert-desc">Description</label>
+          <textarea id="cert-desc" class="form-textarea" placeholder="Brief summary of what you achieved..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="cert-image">Image URL or Local Path</label>
+          <input type="text" id="cert-image" class="form-input" placeholder="assets/certificate1.jpeg or https://..." required>
+        </div>
+
+        <div class="form-group">
+          <label for="cert-file-upload">Or Upload New Image (Supabase Storage)</label>
+          <input type="file" id="cert-file-upload" class="form-input" accept="image/*">
+        </div>
+
+        <div class="form-group">
+          <label for="cert-credential">Credential / Verification Link (Optional)</label>
+          <input type="text" id="cert-credential" class="form-input" placeholder="https://link-to-certificate.com">
+        </div>
+
+        <div class="form-group">
+          <label for="cert-order">Display Order</label>
+          <input type="number" id="cert-order" class="form-input" value="1" min="1">
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+          <button type="button" class="admin-btn btn-secondary" onclick="closeCertificateModal()">Cancel</button>
+          <button type="submit" id="save-cert-btn" class="admin-btn btn-primary">Save Certificate</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SUPABASE SETTINGS MODAL -->
+  <div id="settings-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3><i class="fas fa-cog"></i> Supabase Configuration</h3>
+        <button class="close-modal-btn" onclick="toggleSettingsModal(false)">&times;</button>
+      </div>
+      <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 15px;">
+        Update your Supabase credentials. These are securely stored in your browser session.
+      </p>
+      <form id="supabase-config-form">
+        <div class="form-group">
+          <label for="sb-url">Supabase Project URL</label>
+          <input type="url" id="sb-url" class="form-input" placeholder="https://xyzcompany.supabase.co" required>
+        </div>
+        <div class="form-group">
+          <label for="sb-key">Supabase Anon Key</label>
+          <textarea id="sb-key" class="form-textarea" placeholder="eyJhbGciOiJIUzI1NiIsIn..." required></textarea>
+        </div>
+        <div style="display: flex; gap: 10px; justify-content: space-between; align-items: center; margin-top: 15px;">
+          <button type="button" class="admin-btn btn-danger btn-sm" onclick="window.appSupabase.resetConfig()">Clear Saved Keys</button>
+          <div style="display: flex; gap: 10px;">
+            <button type="button" class="admin-btn btn-secondary" onclick="toggleSettingsModal(false)">Cancel</button>
+            <button type="submit" class="admin-btn btn-primary">Save Changes</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/admin-dashboard.js"></script>
+</body>
+</html>

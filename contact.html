@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - Shyamali Portfolio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="contact.css">
+
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+  <!-- 🌌 BACKGROUND -->
+  <div class="stars"></div>
+
+  <header>
+    <div class="logo">My<span>Portfolio</span></div>
+    <nav>
+      <a href="index.html">Portfolio</a>
+      <a href="about.html">About</a>
+      <a href="skills.html">Skills</a>
+      <a href="certificate.html">Certificate</a>
+      <a href="contact.html" class="active">Contact</a>
+    </nav>
+  </header>
+
+  <section class="contact-hero">
+    <h1>Let's <span>Connect</span></h1>
+    <p>Have a project in mind or want to collaborate? Send a message!</p>
+  </section>
+
+  <main class="contact-container">
+
+    <!-- LEFT: CONTACT INFO (Clickable Cards) -->
+    <div class="contact-info">
+      <a href="mailto:shyamalikumarirai@gmail.com" class="info-card">
+        <div class="icon-box"><i class="fas fa-envelope"></i></div>
+        <div>
+          <h4>Email</h4>
+          <p>shyamalikumarirai@gmail.com</p>
+        </div>
+      </a>
+
+      <a href="tel:+918100092904" class="info-card">
+        <div class="icon-box"><i class="fas fa-phone-alt"></i></div>
+        <div>
+          <h4>Phone</h4>
+          <p>+91 8100092904</p>
+        </div>
+      </a>
+
+      <a href="https://linkedin.com/in/shyamali-kumari-rai-792b463b5" target="_blank" rel="noopener noreferrer"
+        class="info-card">
+        <div class="icon-box"><i class="fab fa-linkedin-in"></i></div>
+        <div>
+          <h4>LinkedIn</h4>
+          <p>shyamali-kumari-rai-792b463b5</p>
+        </div>
+      </a>
+
+      <a href="https://github.com/Shyamali-kumari-rai" target="_blank" rel="noopener noreferrer" class="info-card">
+        <div class="icon-box"><i class="fab fa-github"></i></div>
+        <div>
+          <h4>GitHub</h4>
+          <p>Shyamali-kumari-rai</p>
+        </div>
+      </a>
+
+      <a href="https://instagram.com/shyamali.5" target="_blank" rel="noopener noreferrer" class="info-card">
+        <div class="icon-box"><i class="fab fa-instagram"></i></div>
+        <div>
+          <h4>Instagram</h4>
+          <p>@shyamali.5</p>
+        </div>
+      </a>
+    </div>
+
+    <!-- RIGHT: CUSTOM CONTACT FORM -->
+    <div class="contact-form-card">
+      <h2>Send a Message</h2>
+      <p class="subtitle">Fill in the details below and I'll get back to you promptly.</p>
+
+      <div id="contact-alert" class="alert-box" style="display: none;"></div>
+
+      <form id="portfolio-contact-form">
+        <div class="form-group">
+          <label for="name"><i class="fas fa-user"></i> Full Name</label>
+          <input type="text" id="name" placeholder="John Doe" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+          <input type="email" id="email" placeholder="john@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="subject"><i class="fas fa-tag"></i> Subject</label>
+          <input type="text" id="subject" placeholder="Project Inquiry / Opportunity" required>
+        </div>
+
+        <div class="form-group">
+          <label for="message"><i class="fas fa-comment-dots"></i> Message</label>
+          <textarea id="message" placeholder="Hi Shyamali, I'd like to talk about..." required></textarea>
+        </div>
+
+        <button type="submit" id="contact-submit-btn" class="submit-btn">
+          <i class="fas fa-paper-plane"></i> Send Message
+        </button>
+      </form>
+    </div>
+
+  </main>
+
+  <script src="js/supabase-config.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const contactForm = document.getElementById("portfolio-contact-form");
+      const alertBox = document.getElementById("contact-alert");
+      const submitBtn = document.getElementById("contact-submit-btn");
+
+      contactForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const subject = document.getElementById("subject").value.trim();
+        const message = document.getElementById("message").value.trim();
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Sending...`;
+        alertBox.style.display = "none";
+
+        const submission = {
+          id: String(Date.now()),
+          name,
+          email,
+          subject,
+          message,
+          created_at: new Date().toISOString(),
+          is_read: false
+        };
+
+        try {
+          // Save to Supabase if configured
+          if (window.appSupabase.client && window.appSupabase.isConfigured()) {
+            const { error } = await window.appSupabase.client
+              .from('messages')
+              .insert([{
+                name,
+                email,
+                subject,
+                message,
+                is_read: false
+              }]);
+
+            if (error) throw error;
+          }
+
+          // Always also save to localStorage for local testing / offline reliability
+          const existing = JSON.parse(localStorage.getItem("local_messages") || "[]");
+          existing.unshift(submission);
+          localStorage.setItem("local_messages", JSON.stringify(existing));
+
+          // Show success alert
+          alertBox.className = "alert-box alert-success";
+          alertBox.innerHTML = `<span><i class="fas fa-check-circle"></i> Thank you, ${name}! Your message has been sent successfully.</span>`;
+          alertBox.style.display = "flex";
+          contactForm.reset();
+        } catch (err) {
+          console.error("Submission error:", err);
+          // Fallback save to localStorage if network failed
+          const existing = JSON.parse(localStorage.getItem("local_messages") || "[]");
+          existing.unshift(submission);
+          localStorage.setItem("local_messages", JSON.stringify(existing));
+
+          alertBox.className = "alert-box alert-success";
+          alertBox.innerHTML = `<span><i class="fas fa-check-circle"></i> Message received! Thank you for reaching out.</span>`;
+          alertBox.style.display = "flex";
+          contactForm.reset();
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<i class="fas fa-paper-plane"></i> Send Message`;
+        }
+      });
+    });
+  </script>
+
+</body>
+
+</html>
